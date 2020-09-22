@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <helloworld_section_id>
+            <general>
+                <enable>1</enable>
+                <display_text>Hello World</display_text>
+                <display_text2>Hello Worlda</display_text2>
+                <general_test_child>
+                    <display_text>1111111</display_text>
+                </general_test_child>
+            </general>
+        </helloworld_section_id>
+    </default>
+</config>

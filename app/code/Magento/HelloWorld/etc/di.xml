@@ -1,0 +1,21 @@
+<?xml version="1.0"  ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="magento_helloworld_post_listing_data_source" xsi:type="string">HelloWorldVirtualType</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="HelloWorldVirtualType" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">magento_helloworld_post</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\HelloWorld\Model\ResourceModel\Post</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\HelloWorld\Controller\Index\Example">
+        <plugin name="Magento_HelloWorld_Plugin" type="Magento\HelloWorld\Plugin\ExamplePlugin" sortOrder="10" disabled="false" />
+    </type>
+
+</config>
