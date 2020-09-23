@@ -2,6 +2,7 @@
 namespace Magento\HelloWorld\Controller\Model;
 
 use Magento\Framework\App\Action\Context;
+use Magento\HelloWorld\Model\Post;
 
 class GetList extends \Magento\Framework\App\Action\Action
 {
@@ -18,6 +19,7 @@ class GetList extends \Magento\Framework\App\Action\Action
 
     public function execute()
     {
+        /** @var Post $post */
         $post = $this->_postFactory->create();
         $post->load(2);
         echo "<pre>";

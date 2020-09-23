@@ -7,7 +7,7 @@
             </action>
         </referenceBlock>
         <referenceContainer name="content">
-            <block class="Magento\Framework\View\Element\Template" name="my_tab" template="Mageplaza_GiftCard::mytab.phtml">
+            <block class="Mageplaza\GiftCard\Block\GiftCard\Mytab" name="my_tab" template="Mageplaza_GiftCard::mytab.phtml">
             </block>
         </referenceContainer>
     </body>
