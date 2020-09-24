@@ -6,6 +6,13 @@
 $balance = $block->getGCCBalance();
 //configuration Allow Redeem Gift Card là NO thì sẽ ko hiện field này
 $statusRedeem = $block->getStatusRedeem();
+$gCHistory = $block->getHistory();
+
+$test = $block->getHistoryCollection();
+//echo "<pre>";
+//print_r($test->getData());
+//echo "</pre>";
+//die();
 ?>
 <div class="block block-dashboard-info">
         <div class="block-title"><strong>Gift Card Information</strong></div>
@@ -22,9 +29,7 @@ $statusRedeem = $block->getStatusRedeem();
                 </p>
             </div>
         </div>
-        <?php
-        if($statusRedeem == 1) {
-        ?>
+        <?php if($statusRedeem == 1): ?>
         <div class="box box-infomation">
             <strong class="box-title">
                 <span>Redeem</span>
@@ -53,23 +58,42 @@ $statusRedeem = $block->getStatusRedeem();
 <!--                <a class="action edit" href="http://localhost.com/ce234/newsletter/manage/"><span>Edit</span></a>-->
 <!--            </div>-->
             </div>
-        <?php
-        }
-        ?>
+        <?php endif ?>
     </div>
 
     <div class="block-title"><strong>History</strong></div>
     <div class="block-content">
-        <div class="box box-information">
-            <strong class="box-title">
-                <span>Balance</span>
-            </strong>
-            <div class="box-content">
-                <p>
-                    <?php
-                    echo $balance;
-                    ?>
-                </p>
+        <div class="block">
+            <div class="content">
+                <?php if ($gCHistory && count($gCHistory)) : ?>
+                    <div class="table-wrapper orders-history">
+                        <table class="data table table-order-items history" id="my-orders-table">
+                            <thead>
+                            <tr>
+                                <th scope="col" class="col id">Date</th>
+                                <th scope="col" class="col date">Code</th>
+                                <th scope="col" class="col shipping">Amount</th>
+                                <th scope="col" class="col total">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php foreach ($test as $gCHistory) : ?>
+                                <tr>
+                                    <td  class="col date"><?php echo $block->setDate($gCHistory['action_time']) ?></td>
+                                    <td class="col code"><?php echo $block->getGiftCardCode($gCHistory['giftcard_id']) ?></td>
+                                    <td class="col action"><?php echo $block->setCurrency($gCHistory['amount']) ?></td>
+                                    <td class="col amount"><?php echo $gCHistory['action'] ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <?php if ($block->getPagerHtml()): ?>
+                        <div class="order-products-toolbar toolbar bottom"><?php echo $block->getPagerHtml(); ?></div>
+                    <?php endif ?>
+                <?php else: ?>
+                    <div class="message info empty"><span><?php echo __('No any record.'); ?></span></div>
+                <?php endif ?>
             </div>
         </div>
     </div>

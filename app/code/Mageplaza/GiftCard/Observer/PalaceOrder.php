@@ -64,7 +64,6 @@ class PalaceOrder implements \Magento\Framework\Event\ObserverInterface
                 $codelength = $this->_helperData->getCodeConfig('code_length');
                 $product = $this->_product->create()->load($product_id);
                 $myattribute = $product->getResource()->getAttribute('giftcard_amount')->getFrontend()->getValue($product);
-
                 $order_increment_id = $order->getIncrementId();
 
                 try {
@@ -95,7 +94,7 @@ class PalaceOrder implements \Magento\Framework\Event\ObserverInterface
                         $dataHistory = [
                             'giftcard_id' => $giftcard_id,
                             'customer_id' => $customer_id,
-                            'amount'      => 0,
+                            'amount'      => $myattribute,
                             'action'      => 'create'
                         ];
                         $gCHistory->addData($dataHistory)->save();
