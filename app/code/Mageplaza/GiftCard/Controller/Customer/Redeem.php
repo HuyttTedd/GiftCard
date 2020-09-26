@@ -25,8 +25,6 @@ class Redeem extends \Magento\Framework\App\Action\Action
         \Mageplaza\GiftCard\Helper\Data $helperData,
         \Magento\Framework\App\ResourceConnection $resource,
         \Mageplaza\GiftCard\Model\GiftCardCustomerBalanceFactory $giftCardCustomerBalanceFactory
-
-
     )
     {
         $this->_giftCardHistoryFactory = $giftCardHistoryFactory;
@@ -61,7 +59,6 @@ class Redeem extends \Magento\Framework\App\Action\Action
                         $giftcard_id = $gCcode["giftcard_id"];
                         $codeRedeem = $giftcardModel->load($giftcard_id);
                         $codeRedeem->setData('amount_used', $gCcode['balance'])->save();
-                        //die('');
                         //insert vao bang History
                         $amount_change = (int)$gCcode['balance'] - (int)$gCcode['amount_used'];
                         $dataHistory = [
@@ -74,17 +71,20 @@ class Redeem extends \Magento\Framework\App\Action\Action
 
                         //insert vào balance của customer check balance = balance - amount_used
                         $gCCBalanceModel = $this->_giftCardCustomerBalanceFactory->create();
-                        $getInforGC = $gCCBalanceModel->load($customer_id);
-                        if($getInforGC) {
-                            $balanceCus = $getInforGC->getData('balance');
+                        $getInforGC = $gCCBalanceModel->load($customer_id, 'customer_id')->toArray();
+
+                        if(!empty($getInforGC)) {
+                            $getInfoCus = $this->_giftCardCustomerBalanceFactory->create();
+                            $balanceCus = $getInfoCus->load($customer_id, 'customer_id')->getBalance();
                             $newBalance = (int)$amount_change + (int)$balanceCus;
-                            $getInforGC->setData('balance', $newBalance)->save();
+                            $getInfoCus->load($customer_id, 'customer_id')->setData('balance', $newBalance)->save();
                         } else {
                             $dataCusBalance = [
                                 'customer_id' => $customer_id,
                                 'balance'     => $amount_change
                             ];
-                            $gCCBalanceModel->addData($dataCusBalance)->save();
+
+                            $this->_giftCardCustomerBalanceFactory->create()->addData($dataCusBalance)->save();
                         }
 
                         $this->_transaction->commit();

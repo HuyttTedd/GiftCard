@@ -34,7 +34,7 @@ class Test extends Action
         //$this->deleteGiftCard($code, $param['id']);
         //id/3
 
-        //$this->addGiftCard($code, $param);
+        $this->addGiftCard($code, $param);
         //code/DFCVFGRF344E/balance/100/amount_used/0/created_from/admin
 
         //$this->editGiftCard($code, $param);

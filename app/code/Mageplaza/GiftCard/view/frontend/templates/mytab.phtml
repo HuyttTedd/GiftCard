@@ -6,9 +6,9 @@
 $balance = $block->getGCCBalance();
 //configuration Allow Redeem Gift Card là NO thì sẽ ko hiện field này
 $statusRedeem = $block->getStatusRedeem();
-$gCHistory = $block->getHistory();
+//$gCHistory = $block->getHistory();
 
-$test = $block->getHistoryCollection();
+$gCHistory = $block->getHistoryCollection();
 //echo "<pre>";
 //print_r($test->getData());
 //echo "</pre>";
@@ -37,13 +37,11 @@ $test = $block->getHistoryCollection();
             <div class="box-content">
                 <form action="<?php echo $block->getUrl('giftcard/customer/redeem') ?>" class="form" id="my-form" method="post" data-mage-init='{"validation":{"rules": {"field-3": {"required":true}}}}'>
                     <div style="display: flex">
-                        <fieldset class="fieldset">
                             <div class="field name required">
                                 <div class="control">
                                     <input placeholder="Enter gift card code" name="giftcard_code" id="giftcard_code" title="giftcard_code" value="" type="text" class="required-entry input-text"/>
                                 </div>
                             </div>
-                        </fieldset>
                         <div class="actions-toolbar">
                             <div class="primary">
                                 <button type="submit" title="Submit" class="action submit primary">
@@ -54,9 +52,6 @@ $test = $block->getHistoryCollection();
                     </div>
                 </form>
             </div>
-<!--            <div class="box-actions">-->
-<!--                <a class="action edit" href="http://localhost.com/ce234/newsletter/manage/"><span>Edit</span></a>-->
-<!--            </div>-->
             </div>
         <?php endif ?>
     </div>
@@ -77,7 +72,7 @@ $test = $block->getHistoryCollection();
                             </tr>
                             </thead>
                             <tbody>
-                            <?php foreach ($test as $gCHistory) : ?>
+                            <?php foreach ($gCHistory as $gCHistory) : ?>
                                 <tr>
                                     <td  class="col date"><?php echo $block->setDate($gCHistory['action_time']) ?></td>
                                     <td class="col code"><?php echo $block->getGiftCardCode($gCHistory['giftcard_id']) ?></td>

@@ -10,7 +10,6 @@ class Mytab extends \Magento\Framework\View\Element\Template
     protected $_priceHelper;
     protected $_helperData;
     protected $_date;
-    //protected $_historyCollection;
 
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -21,7 +20,6 @@ class Mytab extends \Magento\Framework\View\Element\Template
         \Magento\Framework\Pricing\Helper\Data $priceHelper,
         \Mageplaza\GiftCard\Helper\Data $helperData,
         \Magento\Framework\Stdlib\DateTime\DateTimeFactory $date
-        //\Mageplaza\GiftCard\Model\ResourceModel\GiftCardHistory\Collection $historyCollection
 )
     {
         parent::__construct($context);
@@ -32,18 +30,18 @@ class Mytab extends \Magento\Framework\View\Element\Template
         $this->_priceHelper = $priceHelper;
         $this->_helperData = $helperData;
         $this->_date = $date;
-        //$this->_historyCollection = $historyCollection;
     }
 
     public function getHistoryCollection() {
         $customer_id = $this->_customerSession->getCustomer()->getId();
         $page = ($this->getRequest()->getParam('p')) ? $this->getRequest()->getParam('p') : 1;
         $pageSize = ($this->getRequest()->getParam('limit')) ? $this->getRequest()->getParam('limit') : 5;
-        $collection = $this->_giftCardHistoryFactory->create()->getCollection();
+        $collection = $this->_giftCardHistoryFactory->create()->getCollection()->setOrder('history_id', 'DESC');
         $collection->setPageSize($pageSize);
         $collection->setCurPage($page);
         return $collection;
     }
+
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
@@ -56,7 +54,7 @@ class Mytab extends \Magento\Framework\View\Element\Template
                     $this->getHistoryCollection()
                 );
             $this->setChild('pager', $pager);
-            $this->getHistoryCollection()->load();
+            //$this->getHistoryCollection()->load();
         }
         return $this;
     }

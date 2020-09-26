@@ -12,7 +12,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
         $installer->startSetup();
 
-        if(version_compare($context->getVersion(), '1.0.3', '<')) {
+        if(version_compare($context->getVersion(), '1.0.6', '<')) {
             if (!$installer->tableExists('giftcard_history')) {
                 $table = $installer->getConnection()->newTable(
                     $installer->getTable('giftcard_history')
@@ -47,9 +47,12 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     )
                     ->addColumn(
                         'amount',
-                        \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                        \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
                         null,
-                        ['unsigned' => true],
+                        [
+                            'length' => '12,4',
+                            'nullable'=> false,
+                        ],
                         'Amount Changed'
                     )
                     ->addColumn(
@@ -98,9 +101,12 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     )
                     ->addColumn(
                         'balance',
-                        \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                        \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
                         null,
-                        [],
+                        [
+                            'length' => '12,4',
+                            'nullable'=> false,
+                        ],
                         'Balance'
                     )
                     ->addForeignKey(
@@ -112,6 +118,34 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     )
                     ->setComment('Gift Card Customer Balance Table');
                 $installer->getConnection()->createTable($table);
+            }
+            if($installer->getConnection()->isTableExists('mp_quote')) {
+                $installer->getConnection()->addColumn(
+                    'mp_quote',
+                    'giftcard_code',
+                    [   'type'=>\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                        'size' => 255,
+                        'nullable'=> false,
+                        'comment' => 'Gift Card Code']
+                );
+                $installer->getConnection()->addColumn(
+                    'mp_quote',
+                    'giftcard_base_discount',
+                    [   'type'=>\Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                        'size' => null,
+                        'length' => '12,4',
+                        'nullable'=> false,
+                        'comment' => 'Gift Card Base Discount']
+                );
+                $installer->getConnection()->addColumn(
+                    'mp_quote',
+                    'giftcard_discount',
+                    [   'type'=>\Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                        'size' => null,
+                        'length' => '12,4',
+                        'nullable'=> false,
+                        'comment' => 'Gift Card Discount']
+                );
             }
         }
         $installer->endSetup();

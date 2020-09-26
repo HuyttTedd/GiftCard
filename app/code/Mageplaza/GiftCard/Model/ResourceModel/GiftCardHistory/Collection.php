@@ -3,7 +3,7 @@ namespace Mageplaza\GiftCard\Model\ResourceModel\GiftCardHistory;
 
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
-    protected $_idFieldName = 'giftcard_id';
+    protected $_idFieldName = 'history_id';
 
     protected function _construct()
     {

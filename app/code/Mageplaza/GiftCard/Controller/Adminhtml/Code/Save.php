@@ -55,7 +55,8 @@ class Save extends \Magento\Backend\App\Action
                 $this->_messageManager->addErrorMessage('Edit Gift Card failed!');
             }
                 if(isset($param['back'])) {
-                    return $this->_redirect('*/*/edit');
+                    $id = $param['giftcard_id'];
+                    return $this->_redirect("*/*/edit/id/$id");
                 } else {
                     return $this->_redirect('*/*/index');
                 }
@@ -74,16 +75,19 @@ class Save extends \Magento\Backend\App\Action
                 $giftcardModel = $this->_giftCardFactory->create();
 
                 $giftcardModel->addData($data)->save();
+                $gc_id = $giftcardModel->load($code,'code')->getData('giftcard_id');
+
                 $this->_messageManager->addSuccessMessage('Add Gift Card successfully!');
+                if(isset($param['back']) && isset($gc_id)) {
+                    return $this->_redirect("*/*/edit/id/$gc_id");
+                } else {
+                    return $this->_redirect('*/*/index');
+                }
+
+
 
             } catch (Exception $e) {
                 $this->_messageManager->addErrorMessage('Add Gift Card failed!');
-            }
-
-            if(isset($param['back'])) {
-                return $this->_redirect('*/*/new');
-            } else {
-                return $this->_redirect('*/*/index');
             }
         }
     }
