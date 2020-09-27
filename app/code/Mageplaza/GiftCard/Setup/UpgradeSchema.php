@@ -12,7 +12,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
         $installer->startSetup();
 
-        if(version_compare($context->getVersion(), '1.0.6', '<')) {
+        if(version_compare($context->getVersion(), '1.0.8', '<')) {
             if (!$installer->tableExists('giftcard_history')) {
                 $table = $installer->getConnection()->newTable(
                     $installer->getTable('giftcard_history')
@@ -48,10 +48,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     ->addColumn(
                         'amount',
                         \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                        null,
+                        '12,4',
                         [
-                            'length' => '12,4',
-                            'nullable'=> false,
+                            'nullable' => false
                         ],
                         'Amount Changed'
                     )
@@ -102,10 +101,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     ->addColumn(
                         'balance',
                         \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                        null,
+                        '12,4',
                         [
-                            'length' => '12,4',
-                            'nullable'=> false,
+                            'nullable' => false
                         ],
                         'Balance'
                     )

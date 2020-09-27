@@ -34,20 +34,16 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 ->addColumn(
                     'balance',
                     \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                    null,
-                    [
-                        'length' => '12,4',
-                        'nullable'=> false,
-                    ],
+                    '12,4',
+                    ['nullable' => false],
                     'Balance'
                 )
                 ->addColumn(
                     'amount_used',
                     \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                    null,
+                    '12,4',
                     [
-                        'length' => '12,4',
-                        'nullable'=> false,
+                        'nullable' => false
                     ],
                     'Amount Used'
                 )

@@ -48,9 +48,15 @@ class Save extends \Magento\Backend\App\Action
             try {
                 $id = $param['giftcard_id'];
                 $giftcardModel = $this->_giftCardFactory->create();
-                $giftcardModel->load($id)->setBalance($param['balance'])->save();
-                $this->_messageManager->addSuccessMessage('Edit Gift Card successfully!');
-
+                $getGC = $giftcardModel->load($id);
+                $amountUsed = $getGC->getData('amount_used');
+                if($amountUsed > $param['balance']) {
+                    $this->_messageManager->addErrorMessage('Amount used must not be greater than balance!');
+                    return $this->_redirect("*/*/edit/id/$id");
+                } else {
+                    $getGC->setBalance($param['balance'])->save();
+                    $this->_messageManager->addSuccessMessage('Edit Gift Card successfully!');
+                }
             } catch (Exception $e) {
                 $this->_messageManager->addErrorMessage('Edit Gift Card failed!');
             }

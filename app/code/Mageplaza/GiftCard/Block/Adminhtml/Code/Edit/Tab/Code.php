@@ -46,7 +46,7 @@ class Code extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'label'    => __('Balance'),
                 'title'    => __('Balance'),
                 'required' => true,
-                'class'    => 'required-entry validate-digits validate-greater-than-zero',
+                'class'    => 'required-entry validate-number validate-greater-than-zero',
             ]);
         }
 
@@ -78,7 +78,7 @@ class Code extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'label'    => __('Balance'),
                 'title'    => __('Balance'),
                 'required' => true,
-                'class'    => 'required-entry validate-digits validate-greater-than-zero',
+                'class'    => 'required-entry validate-number validate-greater-than-zero',
                 'value'    => $balance,
             ]);
 

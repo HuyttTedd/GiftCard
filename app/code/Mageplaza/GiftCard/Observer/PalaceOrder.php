@@ -47,13 +47,7 @@ class PalaceOrder implements \Magento\Framework\Event\ObserverInterface
         $order_id = $order->getEntityId();
         $customer_id = $this->_customerSession->getCustomer()->getId();
 
-
-//        $connection = $this->_resourceConnection->getConnection(\Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION);
-//        $tablename = $connection->getTableName('mp_sales_order_item');
-//        $query = "select sku, is_virtual, qty_ordered, product_id from ".$tablename." where order_id = '$order_id'";
-//        $getToCheck = $connection->fetchAll($query);
-          $order = $this->orderRepository->get($order_id);
-
+        $order = $this->orderRepository->get($order_id);
 
         $this->_conn = $this->_resourceConnection->getConnection();
         foreach ($order->getAllItems() as $value) {
@@ -65,13 +59,11 @@ class PalaceOrder implements \Magento\Framework\Event\ObserverInterface
                 $product = $this->_product->create()->load($product_id);
                 $myattribute = $product->getResource()->getAttribute('giftcard_amount')->getFrontend()->getValue($product);
                 $order_increment_id = $order->getIncrementId();
-
                 try {
                     $this->_conn->beginTransaction();
 
                 for($i = 0; $i < $qtyGiftCard; $i++) {
                     $code = $this->_mathRandom->getRandomString($codelength, $chars);
-
                         //Insert into table Gift Card
                         $newGiftCard = $this->_giftCardFactory->create();
                         $dataNewGC = [
@@ -81,12 +73,7 @@ class PalaceOrder implements \Magento\Framework\Event\ObserverInterface
                             'created_from' => $order_increment_id
                         ];
                         $newGiftCard->addData($dataNewGC)->save();
-
                         //Insert into table Gift Card History
-//                        $tablename = $connection->getTableName('mp_mageplaza_giftcard_code');
-//                        $query = "select giftcard_id from ".$tablename."
-//                        where created_from ='$order_increment_id' order by giftcard_id DESC limit 1";
-//                        $getGCHistory = $connection->fetchAll($query);
                         $getGCHistory = $this->_giftCardFactory->create()
                             ->getCollection()->addFilter('created_from', $order_increment_id)
                             ->setOrder('giftcard_id', 'DESC')->setPageSize(1)->toArray();
@@ -97,15 +84,10 @@ class PalaceOrder implements \Magento\Framework\Event\ObserverInterface
                             'giftcard_id' => $giftcard_id,
                             'customer_id' => $customer_id,
                             'amount'      => $myattribute,
-                            'action'      => 'create'
+                            'action'      => 'create from #'.$order_increment_id
                         ];
                         $gCHistory->addData($dataHistory)->save();
-
                         //Insert into table Gift Card Customer Balance
-//                        $tablename = $connection->getTableName('mp_giftcard_customer_balance');
-//                        $query = "select customer_id from ".$tablename."
-//                        where customer_id='$customer_id'";
-//                        $getGCBalance = $connection->fetchAll($query);
                         $getGCBalance = $this->_giftCardCustomerBalanceFactory->create()->load($customer_id, 'customer_id')->toArray();
 
                         if(empty($getGCBalance)) {
