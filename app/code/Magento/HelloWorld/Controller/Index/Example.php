@@ -17,8 +17,8 @@ class Example extends \Magento\Framework\App\Action\Action
     {
         //echo $title."EFF<br>";
         echo __METHOD__."<br>";
-         $this->title = $title;
-        //return 555;
+         //return $this->title = $title;
+        return 666;
     }
 
     public function getTitle()

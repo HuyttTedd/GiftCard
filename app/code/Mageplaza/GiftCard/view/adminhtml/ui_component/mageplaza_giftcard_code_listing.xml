@@ -24,9 +24,9 @@
         </item>
     </argument>
     <listingToolbar name="listing_top">
-        <settings>
-            <sticky>true</sticky>
-        </settings>
+<!--        <settings>-->
+<!--            <sticky>true</sticky>-->
+<!--        </settings>-->
         <bookmark name="bookmarks"/>
         <columnsControls name="columns_controls"/>
         <filterSearch name="fulltext">
@@ -42,7 +42,17 @@
             </argument>
         </filterSearch>
         <filters name="listing_filters"/>
-        <paging name="listing_paging"/>
+        <paging name="listing_paging">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="provider" xsi:type="string">mageplaza_giftcard_code_listing.mageplaza_giftcard_code_listing.listing_top.bookmarks</item>
+                        <item name="namespace" xsi:type="string">current.paging</item>
+                    </item>
+                    <item name="selectProvider" xsi:type="string">mageplaza_giftcard_code_listing.mageplaza_giftcard_code_listing.spinner_columns.ids</item>
+                </item>
+            </argument>
+        </paging>
         <exportButton name="export_button"/>
         <massaction name="listing_massaction">
             <argument name="data" xsi:type="array">
@@ -70,14 +80,14 @@
             <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
             <argument name="name" xsi:type="string">mageplaza_giftcard_code_listing_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">giftcard_id</argument>
-            <argument name="requestFieldName" xsi:type="string">entity_id</argument>
+            <argument name="requestFieldName" xsi:type="string">giftcard_id</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
                     <item name="update_url" xsi:type="url" path="mui/index/render"/>
-<!--                    <item name="storageConfig" xsi:type="array">-->
-<!--                        <item name="indexField" xsi:type="string">entity_id</item>-->
-<!--                    </item>-->
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="indexField" xsi:type="string">giftcard_id</item>
+                    </item>
                 </item>
             </argument>
         </argument>

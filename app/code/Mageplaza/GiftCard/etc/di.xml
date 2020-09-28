@@ -14,4 +14,11 @@
         </arguments>
     </virtualType>
 
+    <type name="Magento\Checkout\Controller\Cart\CouponPost">
+        <plugin name="Mageplaza_GiftCard_Plugin" type="Mageplaza\GiftCard\Plugin\CouponPlugin" sortOrder="10" disabled="false" />
+    </type>
+
+    <type name="Magento\Checkout\Block\Cart\Coupon">
+        <plugin name="Mageplaza_GiftCard_Plugin_2" type="Mageplaza\GiftCard\Plugin\GetGiftCardCodePlugin" sortOrder="10" disabled="false" />
+    </type>
 </config>

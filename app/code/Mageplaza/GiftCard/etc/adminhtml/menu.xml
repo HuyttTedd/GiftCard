@@ -1,8 +1,10 @@
 <?xml version="1.0" ?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Mageplaza_GiftCard::giftcard_id" title="Mageplaza" module="Mageplaza_GiftCard" sortOrder="51" resource="Mageplaza_GiftCard::mageplaza"/>
-        <add id="Mageplaza_GiftCard::managecode_id" title="Manage Codes" module="Mageplaza_GiftCard" sortOrder="1" action="giftcard/code/index" resource="Mageplaza_GiftCard::managecodes" parent="Mageplaza_GiftCard::giftcard_id"/>
-        <add id="Mageplaza_GiftCard::giftcard_configuration_id" title="Configuration" module="Mageplaza_GiftCard" sortOrder="5" parent="Mageplaza_GiftCard::giftcard_id" action="adminhtml/system_config/edit/section/giftcard_section_id" resource="Mageplaza_GiftCard::giftcard_configuration"/>
+        <add id="Mageplaza_GiftCard::mageplaza" title="Mageplaza" module="Mageplaza_GiftCard" sortOrder="10" resource="Mageplaza_GiftCard::mageplaza"/>
+        <add id="Mageplaza_GiftCard::giftcard" title="Gift Card" module="Mageplaza_GiftCard" sortOrder="100" parent="Mageplaza_GiftCard::mageplaza" resource="Mageplaza_GiftCard::giftcard" />
+        <add id="Mageplaza_GiftCard::managecodes" title="Manage Codes" module="Mageplaza_GiftCard" sortOrder="2" action="giftcard/code/index" resource="Mageplaza_GiftCard::managecodes" parent="Mageplaza_GiftCard::giftcard"/>
+        <add id="Mageplaza_GiftCard::giftcard_configuration" title="Configuration" module="Mageplaza_GiftCard" sortOrder="5" parent="Mageplaza_GiftCard::giftcard" action="adminhtml/system_config/edit/section/giftcard_section_id" resource="Mageplaza_GiftCard::giftcard_configuration"/>
+        <add id="Mageplaza_GiftCard::giftcard2" title="    " module="Mageplaza_GiftCard" sortOrder="110" parent="Mageplaza_GiftCard::mageplaza" resource="Mageplaza_GiftCard::giftcard" />
     </menu>
 </config>

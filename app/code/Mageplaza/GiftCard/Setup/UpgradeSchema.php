@@ -12,7 +12,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
         $installer->startSetup();
 
-        if(version_compare($context->getVersion(), '1.0.8', '<')) {
+        if(version_compare($context->getVersion(), '2.0.0', '<')) {
             if (!$installer->tableExists('giftcard_history')) {
                 $table = $installer->getConnection()->newTable(
                     $installer->getTable('giftcard_history')
@@ -123,7 +123,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'giftcard_code',
                     [   'type'=>\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                         'size' => 255,
-                        'nullable'=> false,
+                        'nullable'=> true,
                         'comment' => 'Gift Card Code']
                 );
                 $installer->getConnection()->addColumn(
@@ -132,7 +132,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     [   'type'=>\Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
                         'size' => null,
                         'length' => '12,4',
-                        'nullable'=> false,
+                        'nullable'=> true,
                         'comment' => 'Gift Card Base Discount']
                 );
                 $installer->getConnection()->addColumn(
@@ -141,7 +141,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     [   'type'=>\Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
                         'size' => null,
                         'length' => '12,4',
-                        'nullable'=> false,
+                        'nullable'=> true,
                         'comment' => 'Gift Card Discount']
                 );
             }

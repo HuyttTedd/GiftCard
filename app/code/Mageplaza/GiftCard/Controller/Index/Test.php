@@ -29,12 +29,29 @@ class Test extends Action
     {
         $param = $this->getRequest()->getParams();
         $code = $this->_giftCardFactory->create();
-        //$this->getList($code);
+        if(isset($param['getAll'])) {
+            $this->getList($code);
+        }
 
-        //$this->deleteGiftCard($code, $param['id']);
+        if(isset($param['add'])) {
+            $this->addGiftCard($code, $param);
+            echo "Thêm gift card thành công!";
+        }
+
+        if(isset($param['edit'])) {
+            $this->editGiftCard($code, $param);
+            echo "Sửa thành công gift card có mã: ".$param['id']."!";
+        }
+
+        if(isset($param['delete'])) {
+            $this->deleteGiftCard($code, $param['id']);
+            echo "Xóa thành công!";
+        }
+
+        //
         //id/3
 
-        $this->addGiftCard($code, $param);
+
         //code/DFCVFGRF344E/balance/100/amount_used/0/created_from/admin
 
         //$this->editGiftCard($code, $param);
@@ -49,13 +66,14 @@ class Test extends Action
     }
 
     public function addGiftCard($code, $param) {
+        $newArr = array_slice($param, 1);
        $code->addData($param)->save();
     }
 
     public function editGiftCard($code, $param) {
         $id = $param['id'];
-        array_shift($param);
-        foreach ($param as $key => $val) {
+        $newArr = array_slice($param, 2);
+        foreach ($newArr as $key => $val) {
             $code->load($id)->setData($key, $val)->save();
         }
 
