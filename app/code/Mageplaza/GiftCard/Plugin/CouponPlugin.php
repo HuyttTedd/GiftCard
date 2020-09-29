@@ -23,12 +23,18 @@ class CouponPlugin extends \Magento\Checkout\Controller\Cart {
             : trim($subject->getRequest()->getParam('coupon_code'));
         $giftcard = $this->_giftCardFactory->create()->load($couponCode, 'code')->toArray();
         $codeLength = strlen($couponCode);
-        if(empty($giftcard) && $codeLength) {
+
+        $cartQuote = $subject->cart->getQuote();
+        $oldGC = $cartQuote->getGiftcardCode();
+
+        if(empty($giftcard) && !strlen($oldGC)) {
             $proceed();
             return $subject->_goBack();
-        } elseif (!$codeLength) {
+        }
+
+        if ($codeLength == 0) {
             $subject->_checkoutSession->getQuote()->setGiftcardCode($couponCode)->save();
-            $subject->messageManager->addSuccessMessage(__('You canceled the coupon code!'));
+            $subject->messageManager->addSuccessMessage(__('You canceled the gift code!'));
             return $subject->_goBack();
         } else {
             $restBalance = $giftcard['balance'] - $giftcard['amount_used'];
