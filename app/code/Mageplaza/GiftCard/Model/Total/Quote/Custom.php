@@ -32,12 +32,24 @@ class Custom extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     )
     {
         parent::collect($quote, $shippingAssignment, $total);
-        $baseDiscount = 6;
+        $baseDiscount = 0.1 * $quote->getGrandTotal();
         $discount =  $this->_priceCurrency->convert($baseDiscount);
         $total->addTotalAmount('customdiscount', -$discount);
         $total->addBaseTotalAmount('customdiscount', -$baseDiscount);
         $total->setBaseGrandTotal($total->getBaseGrandTotal() - $baseDiscount);
         $quote->setCustomDiscount(-$discount);
         return $this;
+    }
+
+    public function fetch(
+        \Magento\Quote\Model\Quote $quote,
+        \Magento\Quote\Model\Quote\Address\Total $total
+    ) {
+        $discount = 0.1 * $quote->getGrandTotal();
+        return [
+            'code' => $this->getCode(),
+            'title' => $this->getLabel(),
+            'value' => -$discount  //You can change the reduced amount, or replace it with your own variable
+        ];
     }
 }
