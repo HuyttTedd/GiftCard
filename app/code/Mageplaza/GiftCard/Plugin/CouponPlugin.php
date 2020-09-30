@@ -5,12 +5,14 @@ use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterf
 
 class CouponPlugin extends \Magento\Checkout\Controller\Cart {
     protected $_giftCardFactory;
-    public function __construct(
+    protected $quoteRepository;
 
-        \Mageplaza\GiftCard\Model\GiftCardFactory $giftCardFactory)
+    public function __construct(
+        \Mageplaza\GiftCard\Model\GiftCardFactory $giftCardFactory,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository)
     {
         $this->_giftCardFactory = $giftCardFactory;
-
+        $this->quoteRepository = $quoteRepository;
     }
     public function execute()
     {
@@ -42,6 +44,10 @@ class CouponPlugin extends \Magento\Checkout\Controller\Cart {
                 $subject->messageManager->addErrorMessage(__('Gift Card has no money left!'));
                 return $subject->_goBack();
             } else {
+                $cartQuote = $subject->cart->getQuote();
+                $cartQuote->getShippingAddress()->setCollectShippingRates(true);
+                $cartQuote->setCouponCode($couponCode)->collectTotals();
+                $this->quoteRepository->save($cartQuote);
                 $subject->_checkoutSession->getQuote()->setGiftcardCode($couponCode)->save();
                 $subject->messageManager->addSuccessMessage(__('Gift code applied successfully!'));
                 return $subject->_goBack();

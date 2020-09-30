@@ -14,7 +14,7 @@ define(
     },
         totals: quote.getTotals(),
             isDisplayedCustomdiscount : function () {
-            return true;
+            return totals.getSegment('customer_discount').value < 0;
         },
             getCustomDiscount : function () {
             var price = totals.getSegment('customer_discount').value;
