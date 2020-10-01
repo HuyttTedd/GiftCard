@@ -34,15 +34,13 @@ $gCHistory = $block->getHistoryCollection();
             <strong class="box-title">
                 <span>Redeem</span>
             </strong>
-            <div class="box-content">
+            <div class="block">
                 <form action="<?php echo $block->getUrl('giftcard/customer/redeem') ?>" class="form" id="my-form" method="post" data-mage-init='{"validation":{"rules": {"field-3": {"required":true}}}}'>
                     <div style="display: flex">
-                            <div class="field name required">
                                 <div class="control">
                                     <input placeholder="Enter gift card code" name="giftcard_code" id="giftcard_code" title="giftcard_code" value="" type="text" class="required-entry input-text"/>
                                 </div>
-                            </div>
-                        <div class="actions-toolbar">
+                        <div class="actions">
                             <div class="primary">
                                 <button type="submit" title="Submit" class="action submit primary">
                                     <span>Redeem</span>

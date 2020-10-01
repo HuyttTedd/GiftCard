@@ -6,13 +6,16 @@ use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterf
 class CouponPlugin extends \Magento\Checkout\Controller\Cart {
     protected $_giftCardFactory;
     protected $quoteRepository;
+    protected $_helperData;
 
     public function __construct(
         \Mageplaza\GiftCard\Model\GiftCardFactory $giftCardFactory,
+        \Mageplaza\GiftCard\Helper\Data $helperData,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository)
     {
         $this->_giftCardFactory = $giftCardFactory;
         $this->quoteRepository = $quoteRepository;
+        $this->_helperData = $helperData;
     }
     public function execute()
     {
@@ -23,6 +26,7 @@ class CouponPlugin extends \Magento\Checkout\Controller\Cart {
         $couponCode = $subject->getRequest()->getParam('remove') == 1
             ? ''
             : trim($subject->getRequest()->getParam('coupon_code'));
+        $allowApplyGiftCard = $this->_helperData->getGeneralConfig('allow_checkout');
         $giftcard = $this->_giftCardFactory->create()->load($couponCode, 'code')->toArray();
         $codeLength = strlen($couponCode);
 
@@ -33,23 +37,32 @@ class CouponPlugin extends \Magento\Checkout\Controller\Cart {
             $proceed();
             return $subject->_goBack();
         }
+        $itemsCount = $cartQuote->getItemsCount();
 
         if ($codeLength == 0) {
             $subject->_checkoutSession->getQuote()->setGiftcardCode($couponCode)->save();
+            $subject->_checkoutSession->getQuote()->setGiftcardDiscount(0)->save();
             $subject->messageManager->addSuccessMessage(__('You canceled the gift code!'));
             return $subject->_goBack();
         } else {
-            $restBalance = $giftcard['balance'] - $giftcard['amount_used'];
-            if($restBalance <= 0) {
-                $subject->messageManager->addErrorMessage(__('Gift Card has no money left!'));
-                return $subject->_goBack();
+            if($allowApplyGiftCard == 1) {
+                if ($itemsCount) {
+                    $cartQuote->getShippingAddress()->setCollectShippingRates(true);
+                    $cartQuote->setGiftcardCode($couponCode)->collectTotals();
+                    $this->quoteRepository->save($cartQuote);
+                }
+
+                $restBalance = $giftcard['balance'] - $giftcard['amount_used'];
+                if ($restBalance <= 0) {
+                    $subject->messageManager->addErrorMessage(__('Gift Card has no money left!'));
+                    return $subject->_goBack();
+                } else {
+                    $subject->_checkoutSession->getQuote()->setGiftcardCode($couponCode)->save();
+                    $subject->messageManager->addSuccessMessage(__('Gift code applied successfully!'));
+                    return $subject->_goBack();
+                }
             } else {
-                $cartQuote = $subject->cart->getQuote();
-                $cartQuote->getShippingAddress()->setCollectShippingRates(true);
-                $cartQuote->setCouponCode($couponCode)->collectTotals();
-                $this->quoteRepository->save($cartQuote);
-                $subject->_checkoutSession->getQuote()->setGiftcardCode($couponCode)->save();
-                $subject->messageManager->addSuccessMessage(__('Gift code applied successfully!'));
+                $subject->messageManager->addErrorMessage(__('Apply Giftcode is not available now!'));
                 return $subject->_goBack();
             }
         }

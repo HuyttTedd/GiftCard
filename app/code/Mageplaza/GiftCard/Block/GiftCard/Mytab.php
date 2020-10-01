@@ -81,7 +81,8 @@ class Mytab extends \Magento\Framework\View\Element\Template
     }
 
     public function setDate($date) {
-        return $this->_date->create()->date('d/m/y');
+        return date('m/d/y', strtotime($date));
+        //return $this->_date->create()->date('d/m/y');
     }
 
     public function getGiftCardCode($giftcard_id) {
