@@ -6,7 +6,4 @@
     <event name="customer_customer_authenticated">
         <observer name="mp_display_customer" instance="Magento\HelloWorld\Observer\CustomerLogin" />
     </event>
-    <event name="sales_model_service_quote_submit_success">
-        <observer name="mp_display_checkout" instance="Magento\HelloWorld\Observer\PalaceOrder" />
-    </event>
 </config>

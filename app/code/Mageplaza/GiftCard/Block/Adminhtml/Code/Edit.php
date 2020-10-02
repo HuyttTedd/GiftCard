@@ -25,6 +25,18 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         parent::_construct();
 
         $this->buttonList->update('save', 'label', __('Save Gift Card'));
+//        $this->addButton(
+//            'save_and_continue',
+//            [
+//                'label' => __('Save and Continue Edit'),
+//                'class' => 'save',
+//                'data_attribute' => [
+//                    'mage-init' => [
+//                        'button' => ['event' => 'saveAndContinueEdit', 'target' => '#edit_form']],
+//                ]
+//            ],
+//            -1
+//        );
    }
 
     protected function _prepareLayout()

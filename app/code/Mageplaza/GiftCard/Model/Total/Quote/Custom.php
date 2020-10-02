@@ -41,7 +41,7 @@ class Custom extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         $giftCardCode = $quote->getGiftcardCode();
         $gCInfo = $this->_giftCardFactory->create()->load($giftCardCode, 'code')->toArray();
 
-        $subTotal = (float)$quote->getTotals()['subtotal']->toArray()['value'];
+        $subTotal = (float)$quote->getSubtotal();
         if(!empty($gCInfo)) {
             if($gCInfo['balance'] > $gCInfo['amount_used']) {
                 $restBalance = (float)$gCInfo['balance'] - (float)$gCInfo['amount_used'];
@@ -52,18 +52,22 @@ class Custom extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                 }
 
                 $giftCardDiscount =  $this->_priceCurrency->convert($giftcardBaseDiscount);
-                $total->addTotalAmount($this->getCode(), -$giftCardDiscount);
-                $total->addBaseTotalAmount($this->getCode(), -$giftcardBaseDiscount);
+                $total->addTotalAmount('customdiscount', -$giftCardDiscount);
+                $total->addBaseTotalAmount('customdiscount', -$giftcardBaseDiscount);
                 $quote->setGiftcardDiscount(-$giftCardDiscount)->save();
-                //$total->setBaseGrandTotal($total->getBaseGrandTotal() - $giftCardDiscount);
+
             }
         }
-        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/checkLog.log');
-        $logger = new \Zend\Log\Logger();
-        $logger->addWriter($writer);
-        $logger->info(print_r(json_decode(json_encode($total->getData())), 1));
+//        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/checkLog.log');
+//        $logger = new \Zend\Log\Logger();
+//        $logger->addWriter($writer);
+//        $logger->info(print_r(json_decode(json_encode($quote->getData())), 1));
+//        $logger->info('aaaaaaaa');
+//        $logger->info($quote->getSubtotal());
+//        $logger->info($quote->getGrandTotal());
         return $this;
     }
+
 
     public function fetch(
         \Magento\Quote\Model\Quote $quote,
