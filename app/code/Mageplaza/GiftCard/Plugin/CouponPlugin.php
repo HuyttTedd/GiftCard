@@ -62,7 +62,7 @@ class CouponPlugin extends \Magento\Checkout\Controller\Cart {
                     return $subject->_goBack();
                 }
             } else {
-                $subject->messageManager->addErrorMessage(__('Apply Giftcode is not available now!'));
+                $proceed();
                 return $subject->_goBack();
             }
         }

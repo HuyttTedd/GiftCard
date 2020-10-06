@@ -55,7 +55,7 @@ class Redeem extends \Magento\Framework\App\Action\Action
                     return $this->_redirect('giftcard/customer/index');
                 } else {
                     if($gCcode['balance'] > $gCcode['amount_used']) {
-                        $this->_transaction = $this->_resource->getConnection()->beginTransaction();
+                        //$this->_transaction = $this->_resource->getConnection()->beginTransaction();
                         $giftcard_id = $gCcode["giftcard_id"];
                         $codeRedeem = $giftcardModel->load($giftcard_id);
                         $codeRedeem->setData('amount_used', $gCcode['balance'])->save();
@@ -87,7 +87,7 @@ class Redeem extends \Magento\Framework\App\Action\Action
                             $this->_giftCardCustomerBalanceFactory->create()->addData($dataCusBalance)->save();
                         }
 
-                        $this->_transaction->commit();
+                        //$this->_transaction->commit();
                         $this->_messageManager->addSuccessMessage('Redeem Gift Card successfully!');
                         return $this->_redirect('giftcard/customer/index');
 

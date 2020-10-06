@@ -32,7 +32,7 @@ class MassDelete extends \Magento\Backend\App\Action {
             $this->messageManager->addError($e->getMessage());
         }
         $resultRedirect = $this->resultRedirectFactory->create();
-        return $resultRedirect->setPath('giftcard/code/index'); //Redirect Path
+        return $resultRedirect->setPath('giftcard/code/index');
     }
 
 }

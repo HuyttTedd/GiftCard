@@ -13,7 +13,7 @@ class Test extends \Magento\Framework\View\Element\Template
 }
 
     public function getName() {
-        return "Jacker";
+        return "Hacker";
     }
 
 //    public function sayHello()
@@ -25,4 +25,5 @@ class Test extends \Magento\Framework\View\Element\Template
         $post = $this->_postFactory->create();
         return $post;
     }
+
 }

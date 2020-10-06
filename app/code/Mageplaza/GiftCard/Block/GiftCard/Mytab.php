@@ -10,11 +10,13 @@ class Mytab extends \Magento\Framework\View\Element\Template
     protected $_priceHelper;
     protected $_helperData;
     protected $_date;
+    protected $_giftCardCustomerBalanceFactory;
 
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Mageplaza\GiftCard\Model\GiftCardFactory $giftCardFactory,
         \Mageplaza\GiftCard\Model\GiftCardHistoryFactory $giftCardHistoryFactory,
+        \Mageplaza\GiftCard\Model\GiftCardCustomerBalanceFactory $giftCardCustomerBalanceFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Mageplaza\GiftCard\Model\ResourceModel\GiftCardCustomerBalance\Collection $giftCardCustomerBalanceCollection,
         \Magento\Framework\Pricing\Helper\Data $priceHelper,
@@ -23,6 +25,7 @@ class Mytab extends \Magento\Framework\View\Element\Template
 )
     {
         parent::__construct($context);
+        $this->_giftCardCustomerBalanceFactory = $giftCardCustomerBalanceFactory;
         $this->_giftCardFactory = $giftCardFactory;
         $this->_giftCardHistoryFactory = $giftCardHistoryFactory;
         $this->_giftCardCustomerBalanceCollection = $giftCardCustomerBalanceCollection;
@@ -36,7 +39,7 @@ class Mytab extends \Magento\Framework\View\Element\Template
         $customer_id = $this->_customerSession->getCustomer()->getId();
         $page = ($this->getRequest()->getParam('p')) ? $this->getRequest()->getParam('p') : 1;
         $pageSize = ($this->getRequest()->getParam('limit')) ? $this->getRequest()->getParam('limit') : 5;
-        $collection = $this->_giftCardHistoryFactory->create()->getCollection()->setOrder('history_id', 'DESC');
+        $collection = $this->_giftCardHistoryFactory->create()->getCollection()->addFilter('customer_id', $customer_id)->setOrder('history_id', 'DESC');
         $collection->setPageSize($pageSize);
         $collection->setCurPage($page);
         return $collection;
@@ -66,7 +69,7 @@ class Mytab extends \Magento\Framework\View\Element\Template
 
     public function getGCCBalance(){
         $customer_id = $this->_customerSession->getCustomer()->getId();
-        $balanceCustomer = $this->_giftCardCustomerBalanceCollection->load()->addFilter('customer_id', $customer_id)->getFirstItem();
+        $balanceCustomer = $this->_giftCardCustomerBalanceFactory->create()->load($customer_id, 'customer_id');
         $getCustomer = $balanceCustomer->toArray();
         if(!empty($getCustomer)) {
             $balance = $this->_priceHelper->currency($getCustomer['balance'],true,false);

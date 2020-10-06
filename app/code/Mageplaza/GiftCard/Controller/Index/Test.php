@@ -59,7 +59,7 @@ class Test extends Action
     }
 
     public function getList($code) {
-        $listCodes = $code->getCollection()->getData();
+        $listCodes = $code->getCollection()->toArray();
         echo "<pre>";
         print_r($listCodes);
         echo "</pre>";

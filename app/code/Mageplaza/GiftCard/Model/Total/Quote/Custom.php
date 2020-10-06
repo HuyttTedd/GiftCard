@@ -62,7 +62,6 @@ class Custom extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 //        $logger = new \Zend\Log\Logger();
 //        $logger->addWriter($writer);
 //        $logger->info(print_r(json_decode(json_encode($quote->getData())), 1));
-//        $logger->info('aaaaaaaa');
 //        $logger->info($quote->getSubtotal());
 //        $logger->info($quote->getGrandTotal());
         return $this;

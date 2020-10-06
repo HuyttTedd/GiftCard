@@ -8,11 +8,16 @@
 //    echo "</pre>";
     //echo $block->getUrl('customer/account/login', ['id' => 123])."<br>";
     $a = $block->getPostCollection();
-    echo "<pre>";
-    print_r(get_class_methods($a));
-    echo "</pre>";
+//    echo "<pre>";
+//    print_r(get_class_methods($a));
+//    echo "</pre>";
 ?>
 <h1>Hello World!</h1>
+<form action="<?php echo $block->getUrl('helloworld1/index/test3') ?>" method="post">
+    <input type="text" name="name">
+    <input type="text" name="age">
+    <input type="submit">
+</form>
 
 
 

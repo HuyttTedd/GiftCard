@@ -22,6 +22,7 @@ class Test extends \Magento\Framework\App\Action\Action
 //        $logger = new \Zend\Log\Logger();
 //        $logger->addWriter($writer);
 //        $logger->info(print_r($arr, true));
+
         return $this->_pageFactory->create();
     }
 }
