@@ -12,7 +12,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
         $installer->startSetup();
 
-        if(version_compare($context->getVersion(), '2.0.0', '<')) {
+        if(version_compare($context->getVersion(), '2.0.2', '<')) {
             if (!$installer->tableExists('giftcard_history')) {
                 $table = $installer->getConnection()->newTable(
                     $installer->getTable('giftcard_history')

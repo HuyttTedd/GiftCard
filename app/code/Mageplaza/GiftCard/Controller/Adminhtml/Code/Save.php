@@ -50,6 +50,7 @@ class Save extends \Magento\Backend\App\Action
                 $giftcardModel = $this->_giftCardFactory->create();
                 $getGC = $giftcardModel->load($id)->toArray();
                 if(!empty($getGC)) {
+                    $getGC = $giftcardModel->load($id);
                     $amountUsed = $getGC->getData('amount_used');
                     if($amountUsed > $param['balance']) {
                         $this->_messageManager->addErrorMessage('Amount used must not be greater than balance!');

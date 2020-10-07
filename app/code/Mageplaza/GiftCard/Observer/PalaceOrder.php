@@ -15,6 +15,7 @@ class PalaceOrder implements \Magento\Framework\Event\ObserverInterface
     protected $_customerSession;
     protected $_conn;
     protected $orderRepository;
+    protected $_messageManager;
 
     public function __construct(
         \Mageplaza\GiftCard\Model\GiftCardFactory $giftCardFactory,
@@ -25,6 +26,7 @@ class PalaceOrder implements \Magento\Framework\Event\ObserverInterface
         \Magento\Catalog\Model\ProductFactory $product,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\App\ResourceConnection $resourceConnection,
+        \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
     )
     {
@@ -37,6 +39,7 @@ class PalaceOrder implements \Magento\Framework\Event\ObserverInterface
         $this->_customerSession = $customerSession;
         $this->_resourceConnection = $resourceConnection;
         $this->orderRepository = $orderRepository;
+        $this->_messageManager = $messageManager;
     }
 
 
@@ -63,47 +66,63 @@ class PalaceOrder implements \Magento\Framework\Event\ObserverInterface
                     $this->_conn->beginTransaction();
 
                 for($i = 0; $i < $qtyGiftCard; $i++) {
-                    $code = $this->_mathRandom->getRandomString($codelength, $chars);
-                        //Insert into table Gift Card
-                        $newGiftCard = $this->_giftCardFactory->create();
-                        $dataNewGC = [
-                            'code' => $code,
-                            'balance' => $myattribute,
-                            'amount_used' => 0,
-                            'created_from' => $order_increment_id
-                        ];
-                        $newGiftCard->addData($dataNewGC)->save();
-                        //Insert into table Gift Card History
-                        $getGCHistory = $this->_giftCardFactory->create()
-                            ->getCollection()->addFilter('created_from', $order_increment_id)
-                            ->setOrder('giftcard_id', 'DESC')->setPageSize(1)->toArray();
-                        $giftcard_id = $getGCHistory['items'][0]['giftcard_id'];
-                        $gCHistory = $this->_giftCardHistoryFactory->create();
+                    $j = 0;
 
-                        $dataHistory = [
-                            'giftcard_id' => $giftcard_id,
-                            'customer_id' => $customer_id,
-                            'amount'      => $myattribute,
-                            'action'      => 'create from #'.$order_increment_id
-                        ];
-                        $gCHistory->addData($dataHistory)->save();
-                        //Insert into table Gift Card Customer Balance
-                        $getGCBalance = $this->_giftCardCustomerBalanceFactory->create()->load($customer_id, 'customer_id')->toArray();
-
-                        if(empty($getGCBalance)) {
-                            $gCCBalance = $this->_giftCardCustomerBalanceFactory->create();
-                            $dataGCCBalance = [
-                                'customer_id' => $customer_id,
-                                'balance'     => 0
+                    while($j < 10) {
+                        $code = $this->_mathRandom->getRandomString($codelength, $chars);
+                        $checkRepeatCode = $this->_giftCardFactory->create()->load($code, 'code')->toArray();
+                        if(empty($checkRepeatCode)) {
+                            //Insert into table Gift Card
+                            $newGiftCard = $this->_giftCardFactory->create();
+                            $dataNewGC = [
+                                'code' => $code,
+                                'balance' => $myattribute,
+                                'amount_used' => 0,
+                                'created_from' => $order_increment_id
                             ];
-                            $gCCBalance->addData($dataGCCBalance)->save();
+                            $newGiftCard->addData($dataNewGC)->save();
+                            //Insert into table Gift Card History
+                            $getGCHistory = $this->_giftCardFactory->create()
+                                ->getCollection()->addFilter('created_from', $order_increment_id)
+                                ->setOrder('giftcard_id', 'DESC')->setPageSize(1)->toArray();
+                            $giftcard_id = $getGCHistory['items'][0]['giftcard_id'];
+                            $gCHistory = $this->_giftCardHistoryFactory->create();
+
+                            $dataHistory = [
+                                'giftcard_id' => $giftcard_id,
+                                'customer_id' => $customer_id,
+                                'amount'      => $myattribute,
+                                'action'      => 'create from #'.$order_increment_id
+                            ];
+                            $gCHistory->addData($dataHistory)->save();
+                            $j = 11;
+                        } else {
+                            if($j == 9) {
+                                $this->_messageManager->addErrorMessage('Something went wrong. Please try again!');
+                                return $this;
+                            } else {
+                                $j++;
+                            }
                         }
+                    }
 
                     }
+                    //Insert into table Gift Card Customer Balance
+                    $getGCBalance = $this->_giftCardCustomerBalanceFactory->create()->load($customer_id, 'customer_id')->toArray();
+
+                    if(empty($getGCBalance)) {
+                        $gCCBalance = $this->_giftCardCustomerBalanceFactory->create();
+                        $dataGCCBalance = [
+                            'customer_id' => $customer_id,
+                            'balance'     => 0
+                        ];
+                        $gCCBalance->addData($dataGCCBalance)->save();
+                    }
+
                     $this->_conn->commit();
                 }
                 catch (Exception $e) {
-
+                    $this->_messageManager->addErrorMessage('Something went wrong!');
                 }
             }
         }

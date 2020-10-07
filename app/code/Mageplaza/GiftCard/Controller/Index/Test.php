@@ -35,17 +35,19 @@ class Test extends Action
 
         if(isset($param['add'])) {
             $this->addGiftCard($code, $param);
-            echo "Thêm gift card thành công!";
+            $this->getList($code);
         }
 
         if(isset($param['edit'])) {
             $this->editGiftCard($code, $param);
             echo "Sửa thành công gift card có mã: ".$param['id']."!";
+            $this->getList($code);
         }
 
         if(isset($param['delete'])) {
             $this->deleteGiftCard($code, $param['id']);
             echo "Xóa thành công!";
+            $this->getList($code);
         }
 
         //
@@ -67,7 +69,13 @@ class Test extends Action
 
     public function addGiftCard($code, $param) {
         $newArr = array_slice($param, 1);
-       $code->addData($param)->save();
+        if(isset($param['code']) && isset($param['balance']) && isset($param['amount_used']) && isset($param['created_from'])) {
+            $code->addData($param)->save();
+            echo "Thêm gift card thành công!";
+        } else {
+            echo "Bạn chưa nhập đủ dữ liệu!";
+        }
+
     }
 
     public function editGiftCard($code, $param) {

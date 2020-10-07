@@ -35,19 +35,28 @@ protected $_giftCardFactory;
 
     public function execute()
     {
-        $order = $this->orderRepository->get(1);
-        foreach ($order->getAllItems() as $item) {
-            echo $item['sku'];
-        }
-        $getGCHistory = $this->_giftCardFactory->create()->getCollection()->addFilter('created_from', 'admin')->setOrder('giftcard_id', 'DESC')->setPageSize(1)->toArray();
-        echo "<pre>";
-        print_r($getGCHistory['items']);
-        echo "</pre>";
-        $getGCBalance = $this->_giftCardCustomerBalanceFactory->create()->load(2, 'customer_id')->toArray();
-        echo "<pre>";
-        print_r($getGCBalance);
-        echo "</pre>";
+//        $order = $this->orderRepository->get(1);
+//        foreach ($order->getAllItems() as $item) {
+//            echo $item['sku'];
+//        }
+//        $getGCHistory = $this->_giftCardFactory->create()->getCollection()->addFilter('created_from', 'admin')->setOrder('giftcard_id', 'DESC')->setPageSize(1)->toArray();
+//        echo "<pre>";
+//        print_r($getGCHistory['items']);
+//        echo "</pre>";
+//        $getGCBalance = $this->_giftCardCustomerBalanceFactory->create()->load(2, 'customer_id')->toArray();
+//        echo "<pre>";
+//        print_r($getGCBalance);
+//        echo "</pre>";
+        $checkRepeatCode = $this->_giftCardFactory->create()->load(42161, 'giftcard_id')->toArray();
+        print_r($checkRepeatCode);
+        echo '<br>';
+$i = 0;
+            while ($i < 5) {
+                $i++;
 
+                echo $i."<br>";
+            }
+            echo 445;
 //        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/checkLog.log');
 //        $logger = new \Zend\Log\Logger();
 //        $logger->addWriter($writer);
